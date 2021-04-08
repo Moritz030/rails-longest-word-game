@@ -27,6 +27,7 @@ class GamesController < ApplicationController
       end
       if english_word["found"] == false
         @result_message = "Word is included but NOT an english word!"
+        # binding.pry
       else
         @result_message = "The word is included in the letters and an english word!"
       end
