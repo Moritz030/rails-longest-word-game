@@ -1,3 +1,5 @@
+require 'open-uri'
+require 'json'
 class GamesController < ApplicationController
   def new
     alphabet = ("A".."Z").to_a
@@ -17,11 +19,21 @@ class GamesController < ApplicationController
         word_included = false
       end
     end
+
     if word_included
-      @result_message = "The word is included in the letters!"
+      english_word = nil
+      URI.open("https://wagon-dictionary.herokuapp.com/#{params["word"]}") do |file|
+        english_word = JSON.parse(file.read)
+      end
+      if english_word["found"] == false
+        @result_message = "Word is included but NOT an english word!"
+      else
+        @result_message = "The word is included in the letters and an english word!"
+      end
     else
       @result_message = "The word is NOT included in the letters"
     end 
+
     # binding.pry
   end
 end
